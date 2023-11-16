@@ -24,6 +24,34 @@ string simplify_minterm(string a) {
     return b;
 }
 
+vector<string> copy_minterms(vector<string> &v) {
+    set <string> s (v.begin(), v.end());
+    vector <string> res;
+    for (set<string>::iterator it=s.begin(); it!=s.end(); ++it) {
+        if (*it != "0") {
+        res.push_back(*it);
+    }}    
+    return res;
+}
+
+bool check_true (vector<string>&b) {
+
+    for (int i=0; i<b.size(); i++) {
+        if (b[i].length() == 1) {
+            if (islower(b[i][0])) {
+            for (int j=0; j<b.size(); j++) {
+
+                if (toupper(b[i][0])==b[j][0]) {
+                    return true;
+                }
+            }
+        }
+            
+        }
+    }
+    return false;
+}
+
 int main() {
     string res;
     int n;
@@ -37,21 +65,15 @@ int main() {
     string expression;
     for (int i=0; i<n; i++) {
         cout << "Enter expression using a, b, c, d "<< i+1<<endl;
-        cout<< "To make OR statement, use +"<<endl;
         cout << "To make NOT statement, use ' above the variable, i.e. A, B, C, D'"<<endl;
         cout << "To finish expression, enter 'finish'"<<endl;
     }
     string tmp;
     vector <string> minterm;
-    vector <string> oper;
     while (tmp != "finish") {
         cin >> tmp;
         if (tmp =="finish") {break;}
-        if (tmp=="+") {
-            oper.push_back(tmp);
-        } else {
-            minterm.push_back(tmp);
-        }
+        minterm.push_back(tmp);
     }
 
     for (int j=0; j<minterm.size(); j++)
@@ -60,6 +82,17 @@ int main() {
         minterm[j] = simplify_minterm(minterm[j]);
     }
 
-    cout << res;
+    minterm = copy_minterms(minterm);
+
+    if (check_true(minterm)) {
+        res = "1";
+        cout<<"DNF = " << res<<endl;
+    }
+    else {
+        cout << "DNF = ";
+    for (int i=0; i<minterm.size(); i++) {
+        cout << minterm[i];
+        if (i!=minterm.size()-1) {cout<<" + ";}
+    }}
 
 }
